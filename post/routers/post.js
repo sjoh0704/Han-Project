@@ -78,6 +78,17 @@ router.post('/post/:postId', async (req, res) => {
     const {postId} = req.params;
     const {title, description, area} = req.body;
     try{
+        const post = await Post.findOne({
+            where:{
+                id:postId
+            }
+        });
+        if(!post){
+            res.status(400).send({
+                message:"post doesn't exist"
+            });
+        }
+
         await Post.update({
             title, 
             description,
