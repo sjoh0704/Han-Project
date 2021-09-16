@@ -22,14 +22,18 @@ import MySalesDetail from './components/MySalesDetail';
 import Likes from './components/LikeList';
 import React from 'react';
 import NotFound from './components/NotFound';
+import UploadS3 from './components/UploadS3';
 
 function App() {
   return (
     <React.Fragment>
+    <UploadS3></UploadS3>
     <UserBanner/>
     <div style={{fontFamily:'twayair'}}>
     <Banner/>
+
     <CategoryBanner/>
+   
     <Switch>
     <Route exact path="/" component={Home}/>
     <Route exact path="/login" component={Login}/>
