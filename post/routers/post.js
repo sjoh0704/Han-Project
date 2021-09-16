@@ -3,6 +3,7 @@ const { Post, Comment } = require('../models');
 const router = express.Router();
 
 router.post('/post', async (req, res) => {
+
     const {user_id, title, description, area} = req.body;
     try{
         await Post.create({
@@ -27,12 +28,24 @@ router.post('/post', async (req, res) => {
 });
 
 router.get('/post', async (req, res) => {
-    const posts = await Post.findAll({});
+    const posts = await Post.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
     res.send({
         payload:posts,
         message: "success"
     });
 });
+
+
+router.get('/post/page/:pageNumber', async (req, res) => {
+    const displaySize = 1; 
+    const offset = (Number(req.params.pageNumber) - 1) * displaySize;
+    const posts = await Post.findAll({ offset: offset, limit: displaySize, order: [['updatedAt', 'DESC']]});
+    res.send({
+        payload:posts,
+        message: "success"
+    });
+});
+
 
 router.get('/post/:postId', async (req, res) => {
     const {postId} = req.params;
