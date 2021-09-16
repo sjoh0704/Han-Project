@@ -4,6 +4,8 @@ import {Container, Navbar, Nav, NavDropdown, Col, Row} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 
 
+
+
 export function CategoryDirection({tag1, tag2, tag3, tag4, tag5}){
     let expression = '홈'
 
@@ -34,6 +36,34 @@ export function CategoryDirection({tag1, tag2, tag3, tag4, tag5}){
 }
 
 
+
+export const PlusMiniBanner = ()=>{
+
+    return (<div style={{background:'gray', color:"black", fontSize:"1.2rem", padding:4}}>
+        <Container>
+            <Row>
+                <Col lg={{span:1, offset:7}}
+                sm={{span:2, offset:7}}
+                xs={{span:5, offset:2}}>
+                <Link to="/post" style={{textDecoration:'none', color:'inherit'}}>
+                자유 거래
+                </Link>
+                </Col>
+                <Col lg={{span:2, offset:0}}
+                sm={{span:2, offset:0}}
+                xs={{span:5, offset:0}}>
+                <Link to="/post" style={{textDecoration:'none', color:'inherit'}}>
+                경매 상품
+                </Link>
+                </Col>
+                
+            </Row>
+        </Container>
+        
+    </div>)
+}
+
+
 function CategoryBanner(){
 
     const{isLoggedIn} = useSelector(state=>({
@@ -47,7 +77,7 @@ function CategoryBanner(){
         
         let  path = '/category/' + (k.pk)
         return (
-            <Col lg='1' sm='2' xs='3'>
+            <Col lg='1' md='2' sm='2' xs='3'>
             <Nav.Item>
             <Nav.Link href={path} style={{color:'white',padding:5}}>{k.kind}</Nav.Link>
             </Nav.Item>
@@ -90,5 +120,6 @@ function CategoryBanner(){
         
    );
 }
+
 
 export default CategoryBanner

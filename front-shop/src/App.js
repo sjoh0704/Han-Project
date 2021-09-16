@@ -11,7 +11,7 @@ import { Route, Switch} from 'react-router-dom';
 import ProductByCategory from './components/ProductByCategory'
 import UserBanner from './components/UserBanner'
 import Banner from './components/Banner'
-import CategoryBanner from './components/CategoryBanner';
+import CategoryBanner, { PlusMiniBanner } from './components/CategoryBanner';
 import ProductDetail from './components/ProductDetail'
 import OrderList from './components/OrderList';
 import PurchasePage from './components/PurchasePage';
@@ -22,18 +22,19 @@ import MySalesDetail from './components/MySalesDetail';
 import Likes from './components/LikeList';
 import React from 'react';
 import NotFound from './components/NotFound';
-import UploadS3 from './components/UploadS3';
+import MainPost from './components/MainPost';
+// import UploadS3 from './components/UploadS3';
 
 function App() {
   return (
     <React.Fragment>
-    <UploadS3></UploadS3>
+    {/* <UploadS3></UploadS3> */}
     <UserBanner/>
     <div style={{fontFamily:'twayair'}}>
     <Banner/>
 
     <CategoryBanner/>
-   
+    <PlusMiniBanner/>
     <Switch>
     <Route exact path="/" component={Home}/>
     <Route exact path="/login" component={Login}/>
@@ -49,6 +50,8 @@ function App() {
     <Route exact path="/mysales" component={MySales}/>
     <Route exact path="/mysales/:number" component={MySalesDetail}/>
     <Route exact path="/likes" component={Likes}/>
+    <Route exact path="/post" component={MainPost}/>
+    
     <Route path="*" component={NotFound}/>
     
     
