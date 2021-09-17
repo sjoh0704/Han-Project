@@ -37,13 +37,14 @@ export default function PostDetail({history, match}){
                 waiting
             </div>);
         }
-        const {id, user_id, title, description, hit, area, createdAt, updatedAt} = data;
+        const {id, user_id, title, description, hit, area, createdAt, updatedAt, Images} = data;
         return(<div>
             <ListGroup>
             <ListGroup.Item>{title}</ListGroup.Item>
             <ListGroup.Item>{description}</ListGroup.Item>
             <ListGroup.Item>{area}</ListGroup.Item>
-            <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+            <ListGroup.Item>
+                <img src={Images.length ? Images[0].image_url: ""}></img></ListGroup.Item>
             <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
             </ListGroup>
 

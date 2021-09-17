@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React , {useEffect, useState} from 'react';
 import { uploadFile } from 'react-s3';
 import dotenv from 'dotenv'
 dotenv.config()
@@ -17,38 +17,24 @@ function required(key, defaultValue = undefined) {
         throw new Error(`Key ${key} is undefined`);
     }
     return value;
-}
+};
 
-const config = {
+export const S3Config = {
     bucketName: S3_BUCKET,
     region: REGION,
     accessKeyId: ACCESS_KEY,
     secretAccessKey: SECRET_ACCESS_KEY,
-}
-
-const UploadS3 = () => {
-
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    const handleFileInput = (e) => {
-        setSelectedFile(e.target.files[0]);
+};
+export const UploadS3 = async(files) => {
+    if(!files){
+        return;
     }
+    console.log(files);
+    files.forEach(file => {
+        uploadFile(file, S3Config)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+    });
+       
+};
 
-    const handleUpload = async (file) => {
-        uploadFile(file, config)
-            .then(data => console.log(data))
-            .catch(err => console.error(err))
-    }
-    
-    return <div>
-    
-    <img src="https://hanbucket-test.s3.ap-northeast-2.amazonaws.com/nginx.png"></img>
-
-        <div>React S3 File Upload</div>
-        <input type="file" onChange={handleFileInput}/>
-        <button onClick={() => handleUpload(selectedFile)}> Upload to S3</button>
-
-    </div>
-}
-
-export default UploadS3;

@@ -24,6 +24,7 @@ import React from 'react';
 import NotFound from './components/NotFound';
 import MainPost from './components/MainPost';
 import PostDetail from './components/PostDetail';
+import PostRegister from './components/PostRegister';
 // import UploadS3 from './components/UploadS3';
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
     <Route exact path="/likes" component={Likes}/>
     <Route exact path="/post/page/:number" component={MainPost}/>
     <Route exact path="/post/detail/:number" component={PostDetail}/>
+    <Route exact path="/post/register" component={PostRegister}/>
     <Route path="*" component={NotFound}/>
     
     

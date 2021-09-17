@@ -99,7 +99,23 @@ export default function MainPost({history, match}){
 
                     </Col>
                 </Row>
+            
+            <Row>
+                <Col lg={{span:"4", offset:"8"}}
+                md={{span:"4", offset:"8"}}
+                sm={{span:"3", offset:"9"}}
+                xs={{span:"4", offset:"8"}}>
+                <button 
+                style={{height:"4rem", padding:5}}
+                onClick={()=>{
+                    history.push("/post/register");
+                }}
+                className='filledButton'
+                >게시글 등록하기</button>
+                </Col>
+            </Row>
             <br/>
+            
             <Row>
                 <Col lg={{span:"6", offset:"5"}}
                 md={{span:"6", offset:"5"}}
@@ -108,6 +124,7 @@ export default function MainPost({history, match}){
                 <BasicPagination history={history} path="/post/page"/>    
                 </Col>
             </Row>
+            
             </Container>
             
 
