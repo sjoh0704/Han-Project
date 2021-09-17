@@ -1,133 +1,136 @@
-import React, {useEffect, useState} from 'react';
+import {loginAction} from '../modules/user'
+import axios from 'axios'
+import React, {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {setCategory} from '../modules/category'
-import axios from "axios";
-import Carousel from "react-bootstrap/Carousel";
-import {Container, Navbar, Spinner} from 'react-bootstrap'
-import Loading from './Loading'
+import {Form, Container, Button, Row, Col, Table} from 'react-bootstrap'
+import { CategoryDirection } from './CategoryBanner'
+import BasicPagination from './BasicPagination'
+import '../App.css'
+import Modal from './Modal'
 
+export default function MainPost({history, match}){
+    let pageNumber = match.params.number;
+    const [ modalOpen, setModalOpen ] = useState(false);
+    const closeModal = () => {
+        setModalOpen(false);
+    }
+    const [ modalContents, setModalContents ] = useState('');
+    
 
-export default function MainPost(props){
-    const[products,Setproducts]= useState([])
+    const [posts, setPosts] = useState([]);
+    // const {username, password} = userData;
 
-    const dispatch = useDispatch()
-    const fetchProducts= async ()=>{
-        let res = await axios.get('/apis/v1/product');
-        let product_list = res.data.payload.filter(p => p.valid=== true);
-        product_list = product_list.map(data=> {
-                return  {
-                    ...data,
-                    id: data.pk
-                }
-            })
-            Setproducts(product_list);
+    const fetchPost = async()=>{
+        let res = await axios.get(`/apis/v1/post/page/${pageNumber}`);
+        displayPostList(res.data.payload)
+
+        
     }
 
-
-    const fetchCategory= async ()=>{
-        let res = await axios.get('/apis/v1/category');
-   
-        let category_list = res.data.map(data=> {
-                return{
-                    kind: data.fields.kind,
-                    pk: data.pk
-                }
+    const displayPostList = (payload) =>{
+        if(!payload.length){
+            alert("게시글이 없습니다")
+            console.log("123213")
+            setPosts(<div>
+                게시글이 없습니다.
+            </div>);
+            return;
+        }
+        
+        let post_list = payload.map(item => {
+            
+            const {id, hit, title, createdAt} = item;
+                
+                return (
+                
+                    <tr onClick ={()=>{
+                        history.push(`/post/detail/${id}`)
+                    }}>
+                    <td>{id}</td>
+                    <td> {title}</td>
+                
+                    <td>{hit}</td>
+                    <td>{createdAt}</td>
+                    </tr>
+                    
+                )
+                
             });
-        dispatch(setCategory(category_list))
-       
+            
+            setPosts(post_list);
     }
+
 
     useEffect(()=>{
-        fetchProducts();
-        fetchCategory();
-    },[])
+        fetchPost();
 
-    
-    
+    },[pageNumber])
 
-        return (
-            <div>
-            
-                <div>
-              
-                <ControlledCarousel/>
-           
-                
-                
-                <br/>
-                <Container>
-                <div style={{marginTop:30}}/>
-                <h3>오늘의 상품 추천</h3>
- 
-                <hr/>
-                <Loading products={products}/>
-   
-                </Container>
-                
-               
 
-                </div>
-            </div>
-        );
-}
-
-function ControlledCarousel() {
-    const [index, setIndex] = useState(0);
-
-    const handleSelect = (selectedIndex, e) => {
-        setIndex(selectedIndex);
-    };
     return (
-        
-        <Carousel activeIndex={index} onSelect={handleSelect}>
-            <Carousel.Item>
-                <img
-                    className="d-block w-100"
-                    src="https://img.lovepik.com//back_pic/05/72/43/975bbd3c7e54c21.jpg_wh860.jpg"
-                    alt="First slide"
-                    style={{
-                        minWidth: '100%',
-                        height:'30rem'
-                    }}
-                />
-                <Carousel.Caption>
-                    {/* <h3>First slide label</h3>
-                    <p>First slide label ~~~~</p> */}
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <img
-                    className="d-block w-100"
-                    src="https://image.freepik.com/free-vector/the-interior-of-mall-banner-scene-inside-a-shopping-store-at-night_93732-21.jpg"
-                    alt="Second slide"
-                    style={{
-                        minWidth: '100%',
-                        height:'30rem'
-                    }}
-                />
+   
+    
+     
+        <Container >
+            <Modal open={ modalOpen } close={ closeModal }>
+                {modalContents}
+            </Modal>
+            <CategoryDirection tag1={'자유 거래 게시판'}></CategoryDirection>
+            <br/>
+          
+            <Container >
+                <Row>
+                    <Col lg={{span:"9", offset:"1"}}>
+                    <Table bordered hover size="md">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>Subject</th>
+              
+                <th>Read</th>
+                <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            {posts}
+            </tbody>
 
-                <Carousel.Caption>
-                    {/* <h3>Second slide label</h3>
-                    <p>아무거나 적어 </p> */}
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <img
-                    className="d-block w-100"
-                    src="https://i.pinimg.com/originals/b9/42/dd/b942dd80ac8cba56dd90dc539d2040c0.jpg"
-                    alt="Third slide"
-                    style={{
-                        minWidth: '100%',
-                        height:'30rem'
-                    }}
-                />
-                <Carousel.Caption>
-                    {/* <h3>Third slide label</h3>
-                    <p>
-                    세번째
-                    </p> */}
-                </Carousel.Caption>
-            </Carousel.Item>
-        </Carousel>
+            </Table>
+
+                    </Col>
+                </Row>
+            <br/>
+            <Row>
+                <Col lg={{span:"6", offset:"5"}}
+                md={{span:"6", offset:"5"}}
+                sm={{span:"6", offset:"4"}}
+                xs={{span:"8", offset:"3"}}>
+                <BasicPagination history={history} path="/post/page"/>    
+                </Col>
+            </Row>
+            </Container>
+            
+
+
+        </Container>
+      
     );
+    
+
+    // return (<div style ={{
+    //     display : 'flex', justifyContent : 'center', alignItems: 'center',
+    //     width : '100%', height : '100vh'
+    // }}>
+    //     <form style ={{display : 'flex', flexDirection:'column'}}
+    //         onSubmit={onClickHandler}>
+    //         <label>username</label>
+    //         <input name = "username" value = {username} onChange={onChangeHandler}/>
+    //         <label>Password</label>
+    //         <input name = "password" value = {password} onChange={onChangeHandler}/>
+    //         <br/>
+    //         <button type = 'submit'>
+    //             Login
+    //         </button>
+    //     </form>
+    // </div>);
 }

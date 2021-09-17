@@ -45,14 +45,14 @@ export const PlusMiniBanner = ()=>{
                 <Col lg={{span:1, offset:7}}
                 sm={{span:2, offset:7}}
                 xs={{span:5, offset:2}}>
-                <Link to="/post" style={{textDecoration:'none', color:'inherit'}}>
+                <Link to="/post/page/1" style={{textDecoration:'none', color:'inherit'}}>
                 자유 거래
                 </Link>
                 </Col>
                 <Col lg={{span:2, offset:0}}
                 sm={{span:2, offset:0}}
                 xs={{span:5, offset:0}}>
-                <Link to="/post" style={{textDecoration:'none', color:'inherit'}}>
+                <Link to="/post/1" style={{textDecoration:'none', color:'inherit'}}>
                 경매 상품
                 </Link>
                 </Col>

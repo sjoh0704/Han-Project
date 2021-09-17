@@ -23,6 +23,7 @@ import Likes from './components/LikeList';
 import React from 'react';
 import NotFound from './components/NotFound';
 import MainPost from './components/MainPost';
+import PostDetail from './components/PostDetail';
 // import UploadS3 from './components/UploadS3';
 
 function App() {
@@ -50,8 +51,8 @@ function App() {
     <Route exact path="/mysales" component={MySales}/>
     <Route exact path="/mysales/:number" component={MySalesDetail}/>
     <Route exact path="/likes" component={Likes}/>
-    <Route exact path="/post" component={MainPost}/>
-    
+    <Route exact path="/post/page/:number" component={MainPost}/>
+    <Route exact path="/post/detail/:number" component={PostDetail}/>
     <Route path="*" component={NotFound}/>
     
     
