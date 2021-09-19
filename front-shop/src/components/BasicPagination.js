@@ -8,7 +8,7 @@ const BasicPagination = ({path, history }) =>{
       history.push(`${path}/${number}`);
     }
 
-    for (let number = 1; number <= 5; number++) {
+    for (let number = 1; number <= 10; number++) {
       items.push(
 
         <Pagination.Item key={number} onClick={()=>onClickHandler(number)}>
@@ -19,7 +19,7 @@ const BasicPagination = ({path, history }) =>{
 
     return (
       <div>
-      <Pagination>{items}</Pagination>
+      <Pagination size="md">{items}</Pagination>
       <br />
     </div>
     )

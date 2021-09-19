@@ -125,12 +125,12 @@ export default function PostDetail({ history, match }) {
                         </div>
                         <div style={{ border: "1px solid #dedede" }}>
                             <Row>
-                                <Col lg={{ span: 5, offset: 0 }} md={{ span: 6, offset: 0 }} sm={{ span: 7, offset: 0 }} style={{ marginBottom: 10, marginLeft: 10 }}>
+                                <Col lg={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} sm={{ span: 7, offset: 0 }} style={{ marginBottom: 10, marginLeft: 10 }}>
                                     <Rating user={user} area={post.area} />
                                 </Col>
-                                <Col lg={{ span: 3, offset: 3 }} md={{ span: 4, offset: 1 }} sm={{ span: 4, offset: 0 }}>
-                                    <div style={{ marginLeft: 10, marginTop: 20, fontSize: "1.3rem" }}>Date: {setDate(post.createdAt)}</div>
-                                    <div style={{ marginLeft: 10, marginTop: 20, fontSize: "1.3rem" }}>Hit: {post.hit}</div>
+                                <Col lg={{ span: 3, offset: 2 }} md={{ span: 4, offset: 1 }} sm={{ span: 4, offset: 0 }}>
+                                    <div style={{ marginTop: 20, fontSize: "1.3rem" }}>Date: {setDate(post.createdAt)}</div>
+                                    <div style={{ marginTop: 5, fontSize: "1.3rem" }}>Hit: {post.hit}</div>
                                 </Col>
                             </Row>
                         </div>
