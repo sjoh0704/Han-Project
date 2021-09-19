@@ -29,7 +29,7 @@ const Banner = () => {
                             <Form.Control size="lg" id="inlineFormInputName" placeholder="검색어를 입력하세요" />
                         </Col>
                         <Col lg={{ span: 3 }} sm={{ span: 3 }} xs="3">
-                            <button className="emptyButton" style={{ width: "5em", height: 50, fontSize: "1.3rem" }}>
+                            <button className="emptyButton" style={{ width: "5em", height: "3.5rem", fontSize: "1.3rem" }}>
                                 Search
                             </button>
                         </Col>

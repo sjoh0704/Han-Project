@@ -103,71 +103,89 @@ export default function PostDetail({ history, match }) {
     }, [postId]);
 
     return (
-        <Container>
-            <Modal open={modalOpen} close={closeModal}>
-                {modalContents}
-            </Modal>
-            <CategoryDirection tag1={"자유 거래 게시판"} tag2={post.title}></CategoryDirection>
-            <br />
-            <div>
-                <Row>
-                    <Col lg={{ span: "10", offset: "1" }}>
-                        <div className="primaryBackground" style={{ fontSize: "1.8rem", padding: 5, border: "1px solid #dedede", color: "white" }}>
-                            <Row>
-                                <Col sm={{ offset: 0 }}>
-                                    <div style={{ margin: 3 }}>
-                                        <span style={{ fontSize: "1.5rem" }}>#{post.id}</span>
-                                        <span style={{ marginLeft: 15, marginRight: 5 }}>{post.title}</span>
-                                        <span>[{post.hit}]</span>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-                        <div style={{ border: "1px solid #dedede" }}>
-                            <Row>
-                                <Col lg={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} sm={{ span: 7, offset: 0 }} style={{ marginBottom: 10, marginLeft: 10 }}>
-                                    <Rating user={user} area={post.area} />
-                                </Col>
-                                <Col lg={{ span: 3, offset: 2 }} md={{ span: 4, offset: 1 }} sm={{ span: 4, offset: 0 }}>
-                                    <div style={{ marginTop: 20, fontSize: "1.3rem" }}>Date: {setDate(post.createdAt)}</div>
-                                    <div style={{ marginTop: 5, fontSize: "1.3rem" }}>Hit: {post.hit}</div>
-                                </Col>
-                            </Row>
-                        </div>
-
-                        <div style={{ border: "1px solid #dedede", padding: 30 }}>
-                            <div>
-                                <img style={{ width: "80%", height: "auto" }} src={post.Images.length ? post.Images[0].image_url : ""}></img>
+        <div>
+            <div style={{ background: "#dedede" }}>
+                <Container>
+                    <Row>
+                        <Col xs={{ span: 5, offset: 7 }}>
+                            <div
+                                style={{ height: "2rem", fontSize: "1.2rem", margin: 3, color: "#44444" }}
+                                onClick={() => {
+                                    history.push("/post/register");
+                                }}
+                            >
+                                게시글 등록하기
                             </div>
-
-                            <div style={{ fontSize: "1.5rem", marginTop: 20 }}>{post.description}</div>
-                        </div>
-                        {comments.length ? <div style={{ padding: 10, fontSize: "1.2rem", border: "1px solid #dedede" }}>댓글이 {comments.length}개 달렸습니다.</div> : ""}
-                        <div style={{ padding: 10, fontSize: "1.2rem", border: "1px solid #dedede" }}>{comments.length ? comments : <div>댓글이 없습니다</div>}</div>
-                        <div style={{ border: "1px solid #dedede", padding: 10 }}>
-                            <Form>
-                                <Form.Group as={Row} controlId="exampleForm.ControlInput1">
-                                    <Col lg={{ span: 10, offset: 0 }} sm={{ span: 9, offset: 0 }} xs={{ span: 8, offset: 0 }}>
-                                        <Form.Control size="lg" name="contents" value={contents} onChange={onChangeHandler} placeholder="로그인 후 사용해 주세요" />
-                                    </Col>
-                                    <Col lg={{ span: 2, offset: 0 }} sm={{ span: 3, offset: 0 }} xs={{ span: 4, offset: 0 }}>
-                                        <div className="d-grid gap-2" style={{ fontSize: "1.3rem" }}>
-                                            <button
-                                                onClick={onClickHandler}
-                                                style={{ height: "3rem" }}
-                                                // type="submit"
-                                                className="filledButton"
-                                            >
-                                                댓글 입력
-                                            </button>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+            <Container>
+                <Modal open={modalOpen} close={closeModal}>
+                    {modalContents}
+                </Modal>
+                <CategoryDirection tag1={"자유 거래 게시판"} tag2={post.title}></CategoryDirection>
+                <br />
+                <div>
+                    <Row>
+                        <Col lg={{ span: "10", offset: "1" }}>
+                            <div className="primaryBackground" style={{ fontSize: "1.8rem", padding: 5, border: "1px solid #dedede", color: "white" }}>
+                                <Row>
+                                    <Col sm={{ offset: 0 }}>
+                                        <div style={{ margin: 3 }}>
+                                            <span style={{ fontSize: "1.5rem" }}>#{post.id}</span>
+                                            <span style={{ marginLeft: 15, marginRight: 5 }}>{post.title}</span>
+                                            <span>[{post.hit}]</span>
                                         </div>
                                     </Col>
-                                </Form.Group>
-                            </Form>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
-        </Container>
+                                </Row>
+                            </div>
+                            <div style={{ border: "1px solid #dedede" }}>
+                                <Row>
+                                    <Col lg={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} sm={{ span: 7, offset: 0 }} style={{ marginBottom: 10, marginLeft: 10 }}>
+                                        <Rating user={user} area={post.area} />
+                                    </Col>
+                                    <Col lg={{ span: 3, offset: 2 }} md={{ span: 4, offset: 1 }} sm={{ span: 4, offset: 0 }}>
+                                        <div style={{ margin: 10, fontSize: "1.3rem" }}>Date: {setDate(post.createdAt)}</div>
+                                        <div style={{ margin: 10, fontSize: "1.3rem" }}>Hit: {post.hit}</div>
+                                    </Col>
+                                </Row>
+                            </div>
+
+                            <div style={{ border: "1px solid #dedede", padding: 30 }}>
+                                <div>
+                                    <img style={{ width: "80%", height: "auto" }} src={post.Images.length ? post.Images[0].image_url : ""}></img>
+                                </div>
+
+                                <div style={{ fontSize: "1.5rem", marginTop: 20 }}>{post.description}</div>
+                            </div>
+                            {comments.length ? <div style={{ padding: 10, fontSize: "1.2rem", border: "1px solid #dedede" }}>댓글이 {comments.length}개 달렸습니다.</div> : ""}
+                            <div style={{ padding: 10, fontSize: "1.2rem", border: "1px solid #dedede" }}>{comments.length ? comments : <div>댓글이 없습니다</div>}</div>
+                            <div style={{ border: "1px solid #dedede", padding: 10 }}>
+                                <Form>
+                                    <Form.Group as={Row} controlId="exampleForm.ControlInput1">
+                                        <Col lg={{ span: 10, offset: 0 }} sm={{ span: 9, offset: 0 }} xs={{ span: 8, offset: 0 }}>
+                                            <Form.Control size="lg" name="contents" value={contents} onChange={onChangeHandler} placeholder="로그인 후 사용해 주세요" />
+                                        </Col>
+                                        <Col lg={{ span: 2, offset: 0 }} sm={{ span: 3, offset: 0 }} xs={{ span: 4, offset: 0 }}>
+                                            <div className="d-grid gap-2" style={{ fontSize: "1.3rem" }}>
+                                                <button
+                                                    onClick={onClickHandler}
+                                                    style={{ height: "3rem" }}
+                                                    // type="submit"
+                                                    className="filledButton"
+                                                >
+                                                    댓글 입력
+                                                </button>
+                                            </div>
+                                        </Col>
+                                    </Form.Group>
+                                </Form>
+                            </div>
+                        </Col>
+                    </Row>
+                </div>
+            </Container>
+        </div>
     );
 }

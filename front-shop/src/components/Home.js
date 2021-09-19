@@ -87,7 +87,7 @@ function ControlledCarousel() {
                     alt="First slide"
                     style={{
                         minWidth: '100%',
-                        height:'30rem'
+                        height:'35rem'
                     }}
                 />
                 <Carousel.Caption>

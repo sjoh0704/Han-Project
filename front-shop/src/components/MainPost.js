@@ -29,7 +29,7 @@ export default function MainPost({ history, match }) {
         if (!payload.length) {
             alert("게시글이 없습니다");
 
-            setPosts(<div style={{ fontSize: "1.3rem", padding: 3, paddingLeft:10 }}>게시글이 없습니다.</div>);
+            setPosts(<div style={{ fontSize: "1.3rem", padding: 3, paddingLeft: 10 }}>게시글이 없습니다.</div>);
             return;
         }
 
@@ -38,22 +38,22 @@ export default function MainPost({ history, match }) {
 
             return (
                 <div
-                    style={{ fontSize: "1.3rem", padding: 3 }}
+                    style={{ fontSize: "1.3rem", padding: 5 }}
                     onClick={() => {
                         history.push(`/post/detail/${id}`);
                     }}
                 >
                     <Row>
-                        <Col lg={{ span: 1, offset: 0 }}>
+                        <Col xs={{ span: 1, offset: 0 }}>
                             <div>{id}</div>
                         </Col>
-                        <Col lg={{ span: 8, offset: 0 }}>
+                        <Col md={{ span: 8, offset: 0 }} xs={{ span: 6, offset: 0 }}>
                             <div align="center">{title}</div>
                         </Col>
-                        <Col lg={{ span: 1 }}>
+                        <Col md={{ span: 1 }} xs={{ span: 2, offset: 0 }}>
                             <div>{hit}</div>
                         </Col>
-                        <Col lg={{ span: 2, offset: 0 }}>
+                        <Col md={{ span: 2, offset: 0 }}xs={{ span: 3, offset: 0 }}>
                             <div>{setDate(createdAt)}</div>
                         </Col>
                     </Row>
@@ -74,7 +74,7 @@ export default function MainPost({ history, match }) {
             <div style={{ background: "#dedede" }}>
                 <Container>
                     <Row>
-                        <Col lg={{ span: 3, offset: 7 }}>
+                        <Col xs={{ span: 5, offset: 7 }}>
                             <div
                                 style={{ height: "2rem", fontSize: "1.2rem", margin: 3, color: "#44444" }}
                                 onClick={() => {
@@ -97,20 +97,20 @@ export default function MainPost({ history, match }) {
 
                 <Container>
                     <Row>
-                        <Col lg={{ span: "9", offset: "1" }}>
+                        <Col lg={{ span: 10, offset: 1 }}>
                             <div style={{ border: "1px solid #dedede" }}>
                                 <div style={{ background: "#444444", color: "white", fontSize: "1.3rem", padding: 4 }}>
                                     <Row>
-                                        <Col lg={{ span: 1 }}>
+                                        <Col xs={{ span: 1 }}>
                                             <div>No</div>
                                         </Col>
-                                        <Col lg={{ span: 8 }}>
+                                        <Col md={{ span: 8 }} xs={{ span: 6, offset: 0 }}>
                                             <div align="center">Subject</div>
                                         </Col>
-                                        <Col lg={{ span: 1 }}>
+                                        <Col md={{ span: 1 }} xs={{ span: 2, offset: 0 }}>
                                             <div>Read</div>
                                         </Col>
-                                        <Col lg={{ span: 2 }}>
+                                        <Col md={{ span: 2 }} xs={{ span: 3, offset: 0 }}>
                                             <div>Date</div>
                                         </Col>
                                     </Row>
@@ -125,7 +125,7 @@ export default function MainPost({ history, match }) {
                     <br />
 
                     <Row>
-                        <Col lg={{ span: "6", offset: "4" }} md={{ span: "6", offset: "5" }} sm={{ span: "6", offset: "4" }} xs={{ span: "8", offset: "3" }}>
+                        <Col lg={{ span: "6", offset: "4" }} md={{ span: "6", offset: "4" }} sm={{ span: "6", offset: "3" }} xs={{ span: "8", offset: "3" }}>
                             <BasicPagination history={history} path="/post/page" />
                         </Col>
                     </Row>

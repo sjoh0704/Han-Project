@@ -70,12 +70,12 @@ function PostRegister({ history }) {
             ),
         };
 
-        console.log("바디", body);
+        UploadS3(selectedFiles);
+
         axios
             .post("/apis/v1/post", body)
             .then((response) => {
-                alert("hihi");
-                // history.replace('/')
+                history.replace("/post/page/1");
             })
             .catch((e) => {
                 setModalOpen(true);
@@ -99,6 +99,22 @@ function PostRegister({ history }) {
             <Modal open={modalOpen} close={closeModal}>
                 {modalContents}
             </Modal>
+            <div style={{ background: "#dedede" }}>
+                <Container>
+                    <Row>
+                        <Col xs={{ span: 5, offset: 7 }}>
+                            <div
+                                style={{ height: "2rem", fontSize: "1.2rem", margin: 3, color: "#44444" }}
+                                onClick={() => {
+                                    history.push("/post/register");
+                                }}
+                            >
+                                게시글 등록하기
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
 
             <Container>
                 <CategoryDirection tag1={"자유거래 게시판"} tag2={"게시글 등록하기"}></CategoryDirection>
@@ -139,7 +155,8 @@ function PostRegister({ history }) {
                                         <input type="file" onChange={handleFileInput} />
                                         {/* <button onClick={(e) => emptyFiles(e)}>Empty</button> */}
 
-                                        <p>{`이미지는 최대 ${maxNumber}개까지만 첨부할 수 있습니다`}</p>
+                                        {/* <p>{`이미지는 최대 ${maxNumber}개까지만 첨부할 수 있습니다`}</p> */}
+                                        <br />
                                         <br />
                                     </Col>
                                 </Form.Group>
@@ -150,7 +167,6 @@ function PostRegister({ history }) {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         onClickHandler();
-                                        UploadS3(selectedFiles);
                                     }}
                                 >
                                     게시글 등록
