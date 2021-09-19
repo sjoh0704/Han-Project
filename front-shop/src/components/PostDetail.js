@@ -7,6 +7,7 @@ import { CategoryDirection } from './CategoryBanner'
 import BasicPagination from './BasicPagination'
 import '../App.css'
 import Modal from './Modal'
+import Rating from './Rating'
 
 export default function PostDetail({history, match}){
     let pageNumber = match.params.number;
@@ -16,47 +17,29 @@ export default function PostDetail({history, match}){
         setModalOpen(false);
     }
     const [ modalContents, setModalContents ] = useState('');
-    
-    const [user, setUser] = useState(undefined);
-    const [post, setPost] = useState(undefined);
+    const [user, setUser] = useState({username:"", temperature:"", celcius:""});
+    const [post, setPost] = useState({title: "", description:"", area:"", hit:0, createdAt:"", Images:[]});
+
     // const {username, password} = userData;
 
     const fetchPost = async()=>{
         await axios.get(`/apis/v1/post/${pageNumber}/hit`);
         let res = await axios.get(`/apis/v1/post/${pageNumber}`);
-        let data = res.data.payload;
-        let user = await axios.get(`/apis/v1/user/${data.user_id}`);
-        setPost(displayPostData(data));
-        
-        
+        let user_res = await axios.get(`/apis/v1/user/${res.data.payload.user_id}`);
+        setUser(user_res.data.payload);
+        setPost(res.data.payload);
     }
 
-    const displayPostData = (data) =>{
-        if(!data){
-            return(<div>
-                waiting
-            </div>);
-        }
-        const {id, user_id, title, description, hit, area, createdAt, updatedAt, Images} = data;
-        return(<div>
-            <ListGroup>
-            <ListGroup.Item>{title}</ListGroup.Item>
-            <ListGroup.Item>{description}</ListGroup.Item>
-            <ListGroup.Item>{area}</ListGroup.Item>
-            <ListGroup.Item>
-                <img src={Images.length ? Images[0].image_url: ""}></img></ListGroup.Item>
-            <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-            </ListGroup>
+    const fetchComments = async()=>{
+        await axios.get()
 
-
-        </div>)
     }
 
 
     useEffect(()=>{
         fetchPost();
 
-    },[pageNumber])
+    },[match.params.number, post])
 
     return (
    
@@ -68,13 +51,31 @@ export default function PostDetail({history, match}){
             </Modal>
             <CategoryDirection tag1={'자유 거래 게시판'} tag2={"dddd"}></CategoryDirection>
             <br/>
-            {post}
-          
-            <Container >
-            </Container>
+            <div>
+            <Row>
+                <Col lg={{span:'10', offset:'1'}}>
+                    <ListGroup>
+                        <ListGroup.Item>{post.title}</ListGroup.Item>
+
+                        <ListGroup.Item  style={{}}>
+                        <Rating user={user} area={post.area}/>
+                        </ListGroup.Item>
+                        
+                        <ListGroup.Item>{post.description}</ListGroup.Item>
+                        <ListGroup.Item>{post.area}</ListGroup.Item>
+                        <ListGroup.Item>
+                        <img style={{width: '50%',
+                                height: 'auto'}} 
+                            src={post.Images.length ? post.Images[0].image_url: ""}></img></ListGroup.Item>
+                        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                    </ListGroup>
+    
+                </Col>
+            </Row>
             
 
-
+        </div>
+   
         </Container>
       
     );
