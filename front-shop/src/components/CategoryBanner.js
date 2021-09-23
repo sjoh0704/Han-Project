@@ -52,7 +52,7 @@ export const PlusMiniBanner = ()=>{
                 <Col lg={{span:2, offset:0}}
                 sm={{span:2, offset:0}}
                 xs={{span:5, offset:0}}>
-                <Link to="/post/1" style={{textDecoration:'none', color:'inherit'}}>
+                <Link to="/auction/home" style={{textDecoration:'none', color:'inherit'}}>
                 경매 상품
                 </Link>
                 </Col>
