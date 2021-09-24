@@ -2,7 +2,6 @@ import { ListGroup, Container, Button, Form, Row, Col, ListGroupItem } from "rea
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { CategoryDirection } from "../CategoryBanner";
 import { setMoney, setDate } from "../Convenient";
 import Rating from "../Rating";
@@ -10,9 +9,8 @@ import Modal from "../Modal";
 import io from "socket.io-client";
 import auctionTimer from "./timer";
 
-const socket = io.connect("http://localhost:8083");
-
 function AuctionDetail({ match, history }) {
+    const socket = io.connect(process.env["REACT_APP_BASE_URL"]);
     const auctionId = match.params.number;
     const [timer, setTimer] = useState(new Date());
     const [modalOpen, setModalOpen] = useState(false);
@@ -21,12 +19,11 @@ function AuctionDetail({ match, history }) {
         setModalOpen(false);
     };
 
-    const [amount, setAmount] = useState(1);
     const { isLoggedIn, userData } = useSelector((state) => ({
         isLoggedIn: state.user.isLoggedIn,
         userData: state.user.payload,
     }));
-    // const [like, setLike] = useState({ checked: false });
+
     const [image, setImage] = useState({
         fileurl: null,
     });
@@ -55,7 +52,6 @@ function AuctionDetail({ match, history }) {
     };
 
     useEffect(() => {
-        socket.emit("message", "hihihii");
         socket.on("products", (msg) => {
             setProduct(msg);
         });
@@ -181,9 +177,7 @@ function AuctionDetail({ match, history }) {
                                             </div>
                                             <Row style={{ fontSize: "1.5rem", padding: 20 }}></Row>
                                             <Col>
-                                                <p style={{ fontSize: "3em", margin: 20 }}>
-                                                    {product.price ? (product.price * amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price * amount} ₩
-                                                </p>
+                                                <p style={{ fontSize: "3em", margin: 20 }}>{product.price ? product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price} ₩</p>
                                             </Col>
 
                                             <Col xs="12">
@@ -206,7 +200,7 @@ function AuctionDetail({ match, history }) {
                                 <Col xs="12">
                                     <div style={{ border: "1px solid #dedede", margin: 5 }}>
                                         <Row style={{ paddingTop: 5 }}>
-                                            <Col lg="10" md = '10' xs='12'>
+                                            <Col lg="10" md="10" xs="12">
                                                 <Rating user={seller} area={product.area} />
                                             </Col>
                                         </Row>
@@ -232,9 +226,7 @@ function AuctionDetail({ match, history }) {
                                         </div>
                                         <Row style={{ fontSize: "1.5rem", padding: 20 }}>
                                             <Col xs="6">
-                                                <p style={{ fontSize: "3em", margin: 20 }}>
-                                                    {product.price ? (product.price * amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price * amount} ₩
-                                                </p>
+                                                <p style={{ fontSize: "3em", margin: 20 }}>{product.price ? product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price} ₩</p>
                                             </Col>
 
                                             <Col xs="6">
