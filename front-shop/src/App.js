@@ -58,7 +58,7 @@ function App() {
                     <Route exact path="/post/register" component={PostRegister} />
                     <Route exact path="/auction/home" component={AuctionHome} />
                     <Route exact path="/auction/register" component={AuctionRegister} />
-                    <Route exact path="/auction/detail/:number" component={AuctionDetail} />
+                    <Route exact path="/auction/:number/detail" component={AuctionDetail} />
                     <Route path="*" component={NotFound} />
                 </Switch>
 
