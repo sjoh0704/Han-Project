@@ -9,6 +9,9 @@ import { CategoryDirection } from "../CategoryBanner";
 import { setMoney, setDate } from "../Convenient";
 import Rating from "../Rating";
 import Modal from "../Modal";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:8083");
 
 function AuctionDetail({ match, history }) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -53,6 +56,7 @@ function AuctionDetail({ match, history }) {
     };
 
     useEffect(() => {
+        socket.emit("message", "hihihii");
         fetchProduct();
     }, [match.params.number, like.checked]);
 
