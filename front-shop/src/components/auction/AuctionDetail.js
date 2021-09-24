@@ -46,7 +46,7 @@ function AuctionDetail({ match, history }) {
         let res = await axios.get("/store/" + auctionId);
         let _product = res.data;
         setProduct(_product);
-        setImage(_product.fileurl ? _product.fileurl[0].fileurls : null);
+        setImage(_product.fileurl.length != 0 ? _product.fileurl[0].fileurls : null);
 
         let res_seller = await axios.get("/apis/v1/user/" + _product.seller_id);
         setSeller(res_seller.data.payload);
@@ -74,12 +74,15 @@ function AuctionDetail({ match, history }) {
             setModalOpen(true);
             setModalContents("로그인 후 이용하세요.");
             history.replace("/login");
+            return;
         } else if (userData.user_id == product.seller_id) {
             setModalOpen(true);
             setModalContents("판매자가 구매할 수 없습니다.");
             e.preventDefault();
+            return;
         }
         let res = await axios.put("/store/plus/" + auctionId, { buyer_id: userData.user_id });
+        alert("입찰되었습니다.");
     };
 
     const displayImage = (image) => {
@@ -106,28 +109,106 @@ function AuctionDetail({ match, history }) {
             <Modal open={modalOpen} close={closeModal}>
                 {modalContents}
             </Modal>
+            <div style={{ background: "#dedede" }}>
+                <Container>
+                    <Row>
+                        <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 7 }} md={{ span: 1, offset: 9 }} lg={{ span: 1, offset: 8 }}>
+                            <div
+                                style={{ height: "2rem", fontSize: "1.2rem", margin: 3, color: "#44444" }}
+                                onClick={() => {
+                                    history.push("/auction/home");
+                                }}
+                            >
+                                경매 홈
+                            </div>
+                        </Col>
+                        <Col xs={{ span: 6, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 2, offset: 0 }} lg={{ span: 2, offset: 0 }}>
+                            <div
+                                style={{ height: "2rem", fontSize: "1.2rem", margin: 3, color: "#44444" }}
+                                onClick={() => {
+                                    history.push("/auction/register");
+                                }}
+                            >
+                                경매상품 등록하기
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
             <Container>
                 <CategoryDirection tag1={"경매"} tag2={product.name} />
                 <Row>
                     <Col lg={{ span: 10, offset: 1 }}>
-                        {" "}
                         <div style={{ border: "1px solid #dedede", padding: 5 }}>
-                            <Row>
-                                <Col xs="12" sm="12" md="6" lg="7">
-                                    <div style={{ padding: 15 }}>
-                                        <img
-                                            style={{
-                                                width: "100%",
-                                                height: "auto",
-                                            }}
-                                            src={image}
-                                        ></img>
-                                    </div>
-                                </Col>
-                                <Col xs="12" sm="12" md="6" lg="5">
+                            {image ? (
+                                <Row>
+                                    <Col xs="12" sm="12" md="6" lg="7">
+                                        <div style={{ padding: 15 }}>
+                                            <img
+                                                style={{
+                                                    width: "100%",
+                                                    height: "auto",
+                                                }}
+                                                src={image}
+                                            ></img>
+                                        </div>
+                                    </Col>
+                                    <Col xs="12" sm="12" md="6" lg="5">
+                                        <div style={{ border: "1px solid #dedede", margin: 5 }}>
+                                            <Row style={{ paddingTop: 5 }}>
+                                                <Rating user={seller} area={product.area} />
+                                            </Row>
+                                            <hr />
+
+                                            <Row style={{ marginTop: 20, paddingTop: 20 }}>
+                                                <Col xs="9" sm="9">
+                                                    <p style={{ marginLeft: 20, fontSize: "2.2rem", fontWeight: "bolder" }}>{product.name}</p>
+                                                </Col>
+                                            </Row>
+                                            <div style={{ margin: 20 }}>
+                                                <span style={{ fontSize: "1.5rem" }}> 현재가: </span>
+                                                <span style={{ fontSize: "2rem" }}>{setMoney(product.price)} ₩</span>
+                                            </div>
+                                            <p style={{ fontSize: "1.5rem", margin: 20 }}>등록 시간: {setDate(product.createdAt)}</p>
+                                            <div style={{ fontSize: "1.5rem", margin: 20 }}>
+                                                <span style={{ fontSize: "1.5rem" }}> 낙찰까지 남은 시간:</span>
+                                                {product.finish ? (
+                                                    <span style={{ fontSize: "2rem", fontWeight: "bold" }}> {"0시간 0분 0초"}</span>
+                                                ) : (
+                                                    <span style={{ fontSize: "2rem", fontWeight: "bold" }}> {auctionTimer(product.createdAt)}</span>
+                                                )}
+                                            </div>
+                                            <Row style={{ fontSize: "1.5rem", padding: 20 }}></Row>
+                                            <Col>
+                                                <p style={{ fontSize: "3em", margin: 20 }}>
+                                                    {product.price ? (product.price * amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price * amount} ₩
+                                                </p>
+                                            </Col>
+
+                                            <Col xs="12">
+                                                <div className="d-grid gap-2">
+                                                    {product.finish ? (
+                                                        <div>
+                                                            <p style={{ fontSize: "2rem", margin: 30, color: "red" }}>경매가 마감되었습니다</p>
+                                                        </div>
+                                                    ) : (
+                                                        <button className="emptyButton" onClick={onClickBid} style={{ fontSize: "1.5rem", margin: 20, height: 50 }}>
+                                                            입찰하기
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </Col>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            ) : (
+                                <Col xs="12">
                                     <div style={{ border: "1px solid #dedede", margin: 5 }}>
                                         <Row style={{ paddingTop: 5 }}>
-                                            <Rating user={seller} area={product.area} />
+                                            <Col lg="10" md = '10' xs='12'>
+                                                <Rating user={seller} area={product.area} />
+                                            </Col>
                                         </Row>
                                         <hr />
 
@@ -135,31 +216,44 @@ function AuctionDetail({ match, history }) {
                                             <Col xs="9" sm="9">
                                                 <p style={{ marginLeft: 20, fontSize: "2.2rem", fontWeight: "bolder" }}>{product.name}</p>
                                             </Col>
-                                            {/* <Col xs="3" sm="3">
-                                                <img style={{ width: "2rem" }} src={like.checked ? HeartImg : EmptyHeartImg} onClick={onClickCart}></img>
-                                            </Col> */}
                                         </Row>
+                                        <div style={{ margin: 20 }}>
+                                            <span style={{ fontSize: "1.5rem" }}> 현재가: </span>
+                                            <span style={{ fontSize: "2rem" }}>{setMoney(product.price)} ₩</span>
+                                        </div>
+                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>등록 시간: {setDate(product.createdAt)}</p>
+                                        <div style={{ fontSize: "1.5rem", margin: 20 }}>
+                                            <span style={{ fontSize: "1.5rem" }}> 낙찰까지 남은 시간:</span>
+                                            {product.finish ? (
+                                                <span style={{ fontSize: "2rem", fontWeight: "bold" }}> {"0시간 0분 0초"}</span>
+                                            ) : (
+                                                <span style={{ fontSize: "2rem", fontWeight: "bold" }}> {auctionTimer(product.createdAt)}</span>
+                                            )}
+                                        </div>
+                                        <Row style={{ fontSize: "1.5rem", padding: 20 }}>
+                                            <Col xs="6">
+                                                <p style={{ fontSize: "3em", margin: 20 }}>
+                                                    {product.price ? (product.price * amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price * amount} ₩
+                                                </p>
+                                            </Col>
 
-                                        <p style={{ fontSize: "2rem", margin: 20 }}>{setMoney(product.price)} ₩</p>
-                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>등록 시간: {product.createdAt}</p>
-                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>낙찰까지 남은 시간: {auctionTimer(product.createdAt)}</p>
-                                        <Row style={{ fontSize: "1.5rem", padding: 20 }}></Row>
-                                        <Col>
-                                            <p style={{ fontSize: "3em", margin: 20 }}>
-                                                {product.price ? (product.price * amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price * amount} ₩
-                                            </p>
-                                        </Col>
-
-                                        <Col xs="12">
-                                            <div className="d-grid gap-2">
-                                                <button className="emptyButton" onClick={onClickBid} style={{ fontSize: "1.3rem", margin: 20, height: 50 }}>
-                                                    입찰
-                                                </button>
-                                            </div>
-                                        </Col>
+                                            <Col xs="6">
+                                                <div className="d-grid gap-2">
+                                                    {product.finish ? (
+                                                        <div>
+                                                            <p style={{ fontSize: "2rem", margin: 30, color: "red" }}>경매가 마감되었습니다</p>
+                                                        </div>
+                                                    ) : (
+                                                        <button className="emptyButton" onClick={onClickBid} style={{ fontSize: "1.5rem", margin: 20, height: 50 }}>
+                                                            입찰하기
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </Col>
+                                        </Row>
                                     </div>
                                 </Col>
-                            </Row>
+                            )}
                         </div>
                         <Row style={{ marginTop: 40 }}>
                             <Col>

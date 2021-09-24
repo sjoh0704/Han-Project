@@ -136,17 +136,20 @@ function AuctionRegister({ history }) {
                                     <Form.Label column sm="2" lg="1" xs="4">
                                         상품명
                                     </Form.Label>
-                                    <Col sm="10" lg="8" xs="8">
+                                    <Col sm="8" lg="8" xs="8">
                                         <Form.Control name="name" value={name} onChange={onChangeHandler} placeholder="상품명을 적어주세요" />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group controlId="exampleForm.ControlInput1" as={Row}>
                                     <Form.Label column sm="2" lg="1" xs="4">
-                                        경매 시작 금액
+                                        시작 금액
                                     </Form.Label>
-                                    <Col sm="10" lg="8" xs="8">
+                                    <Col sm="2" lg="2" xs="4">
                                         <Form.Control name="price" value={price} onChange={onChangeHandler} placeholder="시작 금액을 적어주세요" />
                                     </Col>
+                                    <Form.Label column sm="1" lg="1" xs="2">
+                                    ₩
+                                    </Form.Label>
                                 </Form.Group>
 
                                 <Row>
