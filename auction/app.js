@@ -11,6 +11,10 @@ app.use(cors());
 
 app.use('/store', storeRouter);
  
+app.get('/health', (req, res) => {
+  res.send('ok');
+});
+
 connectDB().then(() => {
     console.log('init!');
     const server = app.listen(config.host.port);
