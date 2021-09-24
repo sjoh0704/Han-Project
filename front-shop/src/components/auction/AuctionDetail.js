@@ -8,9 +8,9 @@ import Rating from "../Rating";
 import Modal from "../Modal";
 import io from "socket.io-client";
 import auctionTimer from "./timer";
+const socket = io(process.env["REACT_APP_BASE_URL"] || "http://localhost:82", { transports: ["websocket"] });
 
 function AuctionDetail({ match, history }) {
-    const socket = io.connect(process.env["REACT_APP_BASE_URL"]);
     const auctionId = match.params.number;
     const [timer, setTimer] = useState(new Date());
     const [modalOpen, setModalOpen] = useState(false);
@@ -40,7 +40,7 @@ function AuctionDetail({ match, history }) {
     const [seller, setSeller] = useState({});
 
     const fetchProduct = async () => {
-        let res = await axios.get("/store/" + auctionId);
+        let res = await axios.get("/apis/v1/store/" + auctionId);
         let _product = res.data;
         setProduct(_product);
         setImage(_product.fileurl.length != 0 ? _product.fileurl[0].fileurls : null);
@@ -51,10 +51,11 @@ function AuctionDetail({ match, history }) {
         // check likes
     };
 
+    socket.on("products", (msg) => {
+        setProduct(msg);
+    });
+
     useEffect(() => {
-        socket.on("products", (msg) => {
-            setProduct(msg);
-        });
         fetchProduct();
     }, [auctionId]);
 
@@ -77,7 +78,7 @@ function AuctionDetail({ match, history }) {
             e.preventDefault();
             return;
         }
-        let res = await axios.put("/store/plus/" + auctionId, { buyer_id: userData.user_id });
+        let res = await axios.put("/apis/v1/store/plus/" + auctionId, { buyer_id: userData.user_id });
         alert("입찰되었습니다.");
     };
 

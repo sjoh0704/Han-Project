@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Form, Container, Button, Row, Col } from "react-bootstrap";
-// import ImageUploading from "react-images-uploading";
 import { CategoryDirection } from "../CategoryBanner";
 import AreaButton from "../AreaButton";
 import Modal from "../Modal";
@@ -71,7 +70,7 @@ function AuctionRegister({ history }) {
         UploadS3(selectedFiles);
 
         axios
-            .post("/store", body)
+            .post("/apis/v1/store", body)
             .then((response) => {
                 // history.replace("/auction/home");
             })

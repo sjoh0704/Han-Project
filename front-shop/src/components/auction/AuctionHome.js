@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import Carousel from "react-bootstrap/Carousel";
 import { Col, Container, Navbar, Row, Spinner } from "react-bootstrap";
-import Loading from "../Loading";
 import { MakeAuctionCard } from "../MakeCard";
 
 export default function AuctionHome({ history }) {
     const [products, Setproducts] = useState([]);
 
     const fetchProducts = async () => {
-        let res = await axios.get("/store");
+        let res = await axios.get("/apis/v1/store");
         let _product = res.data;
         Setproducts(_product);
     };
