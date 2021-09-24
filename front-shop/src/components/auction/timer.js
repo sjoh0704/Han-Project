@@ -1,4 +1,4 @@
-const timer = (createdAt) => {
+const auctionTimer = (createdAt) => {
     if (!createdAt) {
         return "...";
     }
@@ -13,7 +13,6 @@ const timer = (createdAt) => {
     console.log(_createdAt, now);
 
     let _date = `${date} ${hour}:${min}`;
-    console.log(_date);
 
     let gap = _createdAt - now;
     if(gap < 0){
@@ -26,4 +25,4 @@ const timer = (createdAt) => {
     return _hour + "시간 " + _min + "분 " + _sec + "초";
 };
 
-export default timer;
+export default auctionTimer;

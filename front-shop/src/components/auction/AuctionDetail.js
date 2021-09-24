@@ -8,12 +8,13 @@ import { setMoney, setDate } from "../Convenient";
 import Rating from "../Rating";
 import Modal from "../Modal";
 import io from "socket.io-client";
-import timer from "./timer"
+import auctionTimer from "./timer";
 
 const socket = io.connect("http://localhost:8083");
 
 function AuctionDetail({ match, history }) {
     const auctionId = match.params.number;
+    const [timer, setTimer] = useState(new Date());
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContents, setModalContents] = useState("");
     const closeModal = () => {
@@ -61,6 +62,13 @@ function AuctionDetail({ match, history }) {
         fetchProduct();
     }, [auctionId]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimer(auctionTimer(product.createdAt));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [timer]);
+
     const onClickBid = async (e) => {
         if (isLoggedIn === false || userData == null) {
             setModalOpen(true);
@@ -72,11 +80,6 @@ function AuctionDetail({ match, history }) {
             e.preventDefault();
         }
         let res = await axios.put("/store/plus/" + auctionId, { buyer_id: userData.user_id });
-    };
-
-    const onChangeHandler = (e) => {
-        const { value } = e.target;
-        setAmount(parseInt(value));
     };
 
     const displayImage = (image) => {
@@ -139,12 +142,8 @@ function AuctionDetail({ match, history }) {
 
                                         <p style={{ fontSize: "2rem", margin: 20 }}>{setMoney(product.price)} ₩</p>
                                         <p style={{ fontSize: "1.5rem", margin: 20 }}>등록 시간: {product.createdAt}</p>
-                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>남은 시간: {timer(product.createdAt)}</p>
-                                        <Row style={{ fontSize: "1.5rem", padding: 20 }}>
-                                            
-
-                                            
-                                        </Row>
+                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>낙찰까지 남은 시간: {auctionTimer(product.createdAt)}</p>
+                                        <Row style={{ fontSize: "1.5rem", padding: 20 }}></Row>
                                         <Col>
                                             <p style={{ fontSize: "3em", margin: 20 }}>
                                                 {product.price ? (product.price * amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : product.price * amount} ₩
@@ -166,7 +165,7 @@ function AuctionDetail({ match, history }) {
                             <Col>
                                 <ListGroup>
                                     <ListGroupItem>
-                                        <p style={{ margin: 10, fontSize: "2rem" }}>상품 상세 </p>
+                                        <p style={{ margin: 10, fontSize: "2rem" }}>경매 상세 </p>
                                     </ListGroupItem>
 
                                     {displayImage(image)}

@@ -65,13 +65,13 @@ function AuctionRegister({ history }) {
             price: parseInt(price),
             area: area,
             description: description,
-            fileurl: selectedFiles.map((image) => `https://${S3Config.bucketName}.s3.${S3Config.region}.amazonaws.com/${image.name}`),
+            fileurl: selectedFiles.map((image) => ({ fileurls: `https://${S3Config.bucketName}.s3.${S3Config.region}.amazonaws.com/${image.name}` })),
         };
 
         UploadS3(selectedFiles);
 
         axios
-            .post("/store/productadd", body)
+            .post("/store", body)
             .then((response) => {
                 // history.replace("/auction/home");
             })
@@ -79,6 +79,7 @@ function AuctionRegister({ history }) {
                 setModalOpen(true);
                 setModalContents("경매 등록에 실패하였습니다. 관리자에게 문의하세요.");
             });
+        history.replace("/auction/home");
     };
 
     const checkLogin = () => {
