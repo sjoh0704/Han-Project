@@ -33,13 +33,13 @@ export default MakeCard;
 export const MakeAuctionCard = ({ products }) => {
     // products = products.filter(product => product.quantity > 0)
     products = products.map((product, index) => {
-        let path = `/auction/${product.id}/detail`;
+        let path = `/auction/detail/${product.id}`;
         return (
             <Col lg={4} sm={6} key={index} bg={"Light"}>
                 <Link style={{ textDecoration: "none", color: "inherit" }} key={index} to={path}>
                     <Card border="secondary" style={{ height: "29rem" }}>
                         <Row>
-                            <Card.Img variant="top" style={{ height: "22rem", objectFit: "cover" }} src={product.fileurl ? product.fileurl : placeholder} />
+                            <Card.Img variant="top" style={{ height: "22rem", objectFit: "cover" }} src={product.fileurl != 0 ? product.fileurl[0].fileurls : placeholder} />
                         </Row>
 
                         <Card.Body style={{ marginTop: 4 }}>

@@ -3,17 +3,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import EmptyHeartImg from "../../assets/images/heart.png";
-import HeartImg from "../../assets/images/heart_pressed.png";
 import { CategoryDirection } from "../CategoryBanner";
 import { setMoney, setDate } from "../Convenient";
 import Rating from "../Rating";
 import Modal from "../Modal";
 import io from "socket.io-client";
+import timer from "./timer"
 
 const socket = io.connect("http://localhost:8083");
 
 function AuctionDetail({ match, history }) {
+    const auctionId = match.params.number;
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContents, setModalContents] = useState("");
     const closeModal = () => {
@@ -25,42 +25,43 @@ function AuctionDetail({ match, history }) {
         isLoggedIn: state.user.isLoggedIn,
         userData: state.user.payload,
     }));
-    const [like, setLike] = useState({ checked: false });
-    const [images, setImages] = useState([]);
-    const [product, setProduct] = useState({});
+    // const [like, setLike] = useState({ checked: false });
+    const [image, setImage] = useState({
+        fileurl: null,
+    });
+    const [product, setProduct] = useState({
+        finish: false,
+        id: null,
+        name: "",
+        price: 0,
+        area: null,
+        seller_id: null,
+        createdAt: null,
+        updatedAt: null,
+    });
     const [seller, setSeller] = useState({});
 
     const fetchProduct = async () => {
-        let res = await axios.get("/apis/v1/product/" + match.params.number);
-        let tmp = res.data.payload;
-        setProduct({
-            ...res.data.payload,
-            product_id: match.params.number,
-        });
-        setImages(tmp.image);
+        let res = await axios.get("/store/" + auctionId);
+        let _product = res.data;
+        setProduct(_product);
+        setImage(_product.fileurl ? _product.fileurl[0].fileurls : null);
 
-        let res_seller = await axios.get("/apis/v1/user/" + tmp.seller_id);
+        let res_seller = await axios.get("/apis/v1/user/" + _product.seller_id);
         setSeller(res_seller.data.payload);
 
         // check likes
-
-        if (isLoggedIn) {
-            let body = {
-                seller_id: res.data.payload.seller_id,
-                buyer_id: userData.user_id,
-                product_id: parseInt(match.params.number),
-            };
-            let res_likes = await axios.post("/apis/v1/carts/check", body);
-            setLike(res_likes.data.payload);
-        }
     };
 
     useEffect(() => {
         socket.emit("message", "hihihii");
+        socket.on("products", (msg) => {
+            setProduct(msg);
+        });
         fetchProduct();
-    }, [match.params.number, like.checked]);
+    }, [auctionId]);
 
-    const onClickOrder = (e) => {
+    const onClickBid = async (e) => {
         if (isLoggedIn === false || userData == null) {
             setModalOpen(true);
             setModalContents("로그인 후 이용하세요.");
@@ -69,32 +70,8 @@ function AuctionDetail({ match, history }) {
             setModalOpen(true);
             setModalContents("판매자가 구매할 수 없습니다.");
             e.preventDefault();
-        } else if (amount < 1 || amount > product.quantity) {
-            setModalOpen(true);
-            setModalContents("수량이 올바르지 않습니다.");
-            e.preventDefault();
         }
-    };
-
-    const onClickCart = async () => {
-        if (isLoggedIn === false) {
-            setModalOpen(true);
-            setModalContents("로그인 후 이용하세요.");
-            return;
-        }
-
-        if (like.checked) {
-            await axios.delete(`/apis/v1/carts/${like[0]._id}`);
-            setLike({ checked: false });
-        } else {
-            let body = {
-                seller_id: product.seller_id,
-                buyer_id: userData.user_id,
-                product_id: parseInt(product.product_id),
-            };
-            await axios.post("/apis/v1/carts/", body);
-            setLike({ checked: true });
-        }
+        let res = await axios.put("/store/plus/" + auctionId, { buyer_id: userData.user_id });
     };
 
     const onChangeHandler = (e) => {
@@ -102,23 +79,23 @@ function AuctionDetail({ match, history }) {
         setAmount(parseInt(value));
     };
 
-    const displayImages = () => {
-        if (images.length == 1) {
-            return;
+    const displayImage = (image) => {
+        if (!image) {
+            return <div></div>;
         }
-        return images.slice(1).map((img) => (
+        return (
             <ListGroupItem>
                 <br />
                 <img
                     style={{
                         width: "60vw",
                     }}
-                    src={img}
+                    src={image}
                 ></img>
                 <br />
                 <br />
             </ListGroupItem>
-        ));
+        );
     };
 
     return (
@@ -127,7 +104,7 @@ function AuctionDetail({ match, history }) {
                 {modalContents}
             </Modal>
             <Container>
-                <CategoryDirection tag1={product.category} tag2={product.name} />
+                <CategoryDirection tag1={"경매"} tag2={product.name} />
                 <Row>
                     <Col lg={{ span: 10, offset: 1 }}>
                         {" "}
@@ -140,7 +117,7 @@ function AuctionDetail({ match, history }) {
                                                 width: "100%",
                                                 height: "auto",
                                             }}
-                                            src={images[0]}
+                                            src={image}
                                         ></img>
                                     </div>
                                 </Col>
@@ -155,25 +132,18 @@ function AuctionDetail({ match, history }) {
                                             <Col xs="9" sm="9">
                                                 <p style={{ marginLeft: 20, fontSize: "2.2rem", fontWeight: "bolder" }}>{product.name}</p>
                                             </Col>
-                                            <Col xs="3" sm="3">
+                                            {/* <Col xs="3" sm="3">
                                                 <img style={{ width: "2rem" }} src={like.checked ? HeartImg : EmptyHeartImg} onClick={onClickCart}></img>
-                                            </Col>
+                                            </Col> */}
                                         </Row>
 
                                         <p style={{ fontSize: "2rem", margin: 20 }}>{setMoney(product.price)} ₩</p>
-                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>남은 수량: {product.quantity}</p>
+                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>등록 시간: {product.createdAt}</p>
+                                        <p style={{ fontSize: "1.5rem", margin: 20 }}>남은 시간: {timer(product.createdAt)}</p>
                                         <Row style={{ fontSize: "1.5rem", padding: 20 }}>
-                                            <Col xs="6" sm="12" lg={4}>
-                                                <p>선택 수량:</p>
-                                            </Col>
+                                            
 
-                                            <Col xs="6" sm="9" lg={4}>
-                                                <Form>
-                                                    <Form.Group controlId="exampleForm.ControlInput1">
-                                                        <Form.Control style={{ fontSize: "1.5rem" }} type="number" onChange={onChangeHandler} value={amount} />
-                                                    </Form.Group>
-                                                </Form>
-                                            </Col>
+                                            
                                         </Row>
                                         <Col>
                                             <p style={{ fontSize: "3em", margin: 20 }}>
@@ -182,26 +152,11 @@ function AuctionDetail({ match, history }) {
                                         </Col>
 
                                         <Col xs="12">
-                                            <Link
-                                                to={
-                                                    isLoggedIn
-                                                        ? {
-                                                              pathname: `/purchase`,
-                                                              state: {
-                                                                  product: product,
-                                                                  demand_amount: amount,
-                                                              },
-                                                          }
-                                                        : "/product/" + match.params.number
-                                                }
-                                                style={{ textDecoration: "none" }}
-                                            >
-                                                <div className="d-grid gap-2">
-                                                    <button className="emptyButton" onClick={onClickOrder} style={{ fontSize: "1.3rem", margin: 20, height: 50 }}>
-                                                        구매하기
-                                                    </button>
-                                                </div>
-                                            </Link>
+                                            <div className="d-grid gap-2">
+                                                <button className="emptyButton" onClick={onClickBid} style={{ fontSize: "1.3rem", margin: 20, height: 50 }}>
+                                                    입찰
+                                                </button>
+                                            </div>
                                         </Col>
                                     </div>
                                 </Col>
@@ -214,7 +169,7 @@ function AuctionDetail({ match, history }) {
                                         <p style={{ margin: 10, fontSize: "2rem" }}>상품 상세 </p>
                                     </ListGroupItem>
 
-                                    {displayImages()}
+                                    {displayImage(image)}
 
                                     <ListGroupItem>
                                         <p style={{ margin: 20, fontSize: "2rem" }}>{product.description}</p>

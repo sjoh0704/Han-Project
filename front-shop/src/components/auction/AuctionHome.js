@@ -6,38 +6,13 @@ import { Col, Container, Navbar, Row, Spinner } from "react-bootstrap";
 import Loading from "../Loading";
 import { MakeAuctionCard } from "../MakeCard";
 
-export default function AuctionHome({history}) {
-    const [products, Setproducts] = useState([{
-        seller_id: 5,
-        name: "제목입니다.1",
-        price: 10000,
-        description: "내용입니다. ",
-        createdAt: "1234",
-        updatedAt: "1234",
-        fileurl:"https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg",
-        id: "dafgfa213f"
-    },{
-        seller_id: 12,
-        name: "제목입니다.2",
-        price: 10000,
-        description: "내용입니다. ",
-        createdAt: "1234",
-        updatedAt: "1234",
-        fileurl:"https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg",
-        id: "dafgfa2132134f"
-    },]);
+export default function AuctionHome({ history }) {
+    const [products, Setproducts] = useState([]);
 
- 
     const fetchProducts = async () => {
-        // let res = await axios.get("/store");
-        // let _product = res.data.payload;
-        // product_list = _product.map((data) => {
-        //     return {
-        //         ...data,
-        //         id: data.pk,
-        //     };
-        // });
-        // Setproducts();
+        let res = await axios.get("/store");
+        let _product = res.data;
+        Setproducts(_product);
     };
 
     useEffect(() => {
