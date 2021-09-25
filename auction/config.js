@@ -16,6 +16,6 @@ export const config = {
         port: parseInt(required('HOST_PORT', 8083)),
     },
     db: {
-        host: required('DB_HOST'), 
+        host: required('MONGO_AUCTION_HOST'), 
     }
 };
