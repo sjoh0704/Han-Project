@@ -8,10 +8,6 @@ COPY . .
 
 RUN npm install --production
 
-CMD ["npx" "sequelize" "db:create"]
-
-CMD ["sleep", "20"]
-
-CMD ["node", "app.js"]
+ENTRYPOINT ["/bin/bash", "run.sh"]
 
 EXPOSE 8082
