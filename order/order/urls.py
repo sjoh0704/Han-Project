@@ -28,6 +28,6 @@ urlpatterns = [
     path('apis/v1/order/<int:pk>', OrderView.as_view()),
     path('apis/v1/order', OrderNonParam.as_view()),
     path('apis/v1/order/sale/<int:pk>', SalesView.as_view()),
-    path('apis/v1/product/<int:pk>/order', OrderByProduct.as_view())
+    path('apis/v1/order/product/<int:pk>', OrderByProduct.as_view())
     
 ]
