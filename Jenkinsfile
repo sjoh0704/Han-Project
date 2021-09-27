@@ -9,6 +9,8 @@ pipeline {
     GATEWAY_IMAGE = 'gateway-service'
     CART_IMAGE = 'cart-service'
     RATING_IMAGE = 'rating-service'
+    POST_IMAGE = 'post-service'
+    AUCTION_IMAGE = 'auction-service'
     TAG = 'test'
     VERSION = 'test${BUILD_NUMBER}'
     }
@@ -18,7 +20,7 @@ pipeline {
     
     stage("clone"){
         steps{
-            git([url: 'https://github.com/sjoh0704/react-django-shop.git', branch: 'dev', credentialsId: 'github-credential'])
+            git([url: 'https://github.com/sjoh0704/Han-Project.git', branch: 'dev', credentialsId: 'github-credential'])
 
         }
 
@@ -52,6 +54,12 @@ pipeline {
             dir('rating'){
             sh 'docker build -t ${DOCKER_ID}/${RATING_IMAGE}:${TAG}${BUILD_NUMBER} .'
             }
+            dir('post'){
+            sh 'docker build -t ${DOCKER_ID}/${POST_IMAGE}:${TAG}${BUILD_NUMBER} .'
+            }
+            dir('auction'){
+            sh 'docker build -t ${DOCKER_ID}/${AUCTION_IMAGE}:${TAG}${BUILD_NUMBER} .'
+            }
             
             
         }
@@ -72,6 +80,8 @@ pipeline {
             sh 'docker push ${DOCKER_ID}/${ORDER_IMAGE}:${TAG}${BUILD_NUMBER}'
             sh 'docker push ${DOCKER_ID}/${CART_IMAGE}:${TAG}${BUILD_NUMBER}'
             sh 'docker push ${DOCKER_ID}/${RATING_IMAGE}:${TAG}${BUILD_NUMBER}'
+            sh 'docker push ${DOCKER_ID}/${POST_IMAGE}:${TAG}${BUILD_NUMBER}'
+            sh 'docker push ${DOCKER_ID}/${AUCTION_IMAGE}:${TAG}${BUILD_NUMBER}'
 
         }
  
@@ -79,8 +89,8 @@ pipeline {
         
         stage("update manifest"){
             steps{
-            git([url: 'https://github.com/sjoh0704/MSA-Shop-Helm-Chart.git', branch: 'master', credentialsId: 'github-credential'])
-            dir('version'){
+            git([url: 'https://github.com/sjoh0704/Sseung-Helm-Chart.git', branch: 'master', credentialsId: 'github-credential'])
+            dir('Han-Project/version'){
            
             echo "update yamls"
 
@@ -88,7 +98,7 @@ pipeline {
             sh 'git add . '
             sh 'git commit -m "commit manifest${BUILD_NUMBER}"'
             withCredentials([usernamePassword(credentialsId: 'github-credential', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sjoh0704/MSA-Shop-Helm-Chart.git master')
+                        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sjoh0704/Sseung-Helm-Chart.git master')
                     }
             
              }

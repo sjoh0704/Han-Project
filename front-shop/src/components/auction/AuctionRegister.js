@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Form, Container, Button, Row, Col } from "react-bootstrap";
-// import ImageUploading from "react-images-uploading";
 import { CategoryDirection } from "../CategoryBanner";
 import AreaButton from "../AreaButton";
 import Modal from "../Modal";
@@ -65,13 +64,13 @@ function AuctionRegister({ history }) {
             price: parseInt(price),
             area: area,
             description: description,
-            fileurl: selectedFiles.map((image) => `https://${S3Config.bucketName}.s3.${S3Config.region}.amazonaws.com/${image.name}`),
+            fileurl: selectedFiles.map((image) => ({ fileurls: `https://${S3Config.bucketName}.s3.${S3Config.region}.amazonaws.com/${image.name}` })),
         };
 
         UploadS3(selectedFiles);
 
         axios
-            .post("/store/productadd", body)
+            .post("/apis/v1/store", body)
             .then((response) => {
                 // history.replace("/auction/home");
             })
@@ -79,6 +78,7 @@ function AuctionRegister({ history }) {
                 setModalOpen(true);
                 setModalContents("경매 등록에 실패하였습니다. 관리자에게 문의하세요.");
             });
+        history.replace("/auction/home");
     };
 
     const checkLogin = () => {
@@ -135,17 +135,20 @@ function AuctionRegister({ history }) {
                                     <Form.Label column sm="2" lg="1" xs="4">
                                         상품명
                                     </Form.Label>
-                                    <Col sm="10" lg="8" xs="8">
+                                    <Col sm="8" lg="8" xs="8">
                                         <Form.Control name="name" value={name} onChange={onChangeHandler} placeholder="상품명을 적어주세요" />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group controlId="exampleForm.ControlInput1" as={Row}>
                                     <Form.Label column sm="2" lg="1" xs="4">
-                                        경매 시작 금액
+                                        시작 금액
                                     </Form.Label>
-                                    <Col sm="10" lg="8" xs="8">
+                                    <Col sm="2" lg="2" xs="4">
                                         <Form.Control name="price" value={price} onChange={onChangeHandler} placeholder="시작 금액을 적어주세요" />
                                     </Col>
+                                    <Form.Label column sm="1" lg="1" xs="2">
+                                    ₩
+                                    </Form.Label>
                                 </Form.Group>
 
                                 <Row>

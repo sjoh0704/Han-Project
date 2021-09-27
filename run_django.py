@@ -1,5 +1,4 @@
 #! /usr/bin/python3
-
 import os 
 
 LOCAL_HOST = "172.30.1.50"

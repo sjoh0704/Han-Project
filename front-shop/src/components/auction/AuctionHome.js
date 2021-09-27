@@ -1,35 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import Carousel from "react-bootstrap/Carousel";
 import { Col, Container, Navbar, Row, Spinner } from "react-bootstrap";
-import Loading from "../Loading";
+import { MakeAuctionCard } from "../MakeCard";
 
-export default function AuctionHome({history}) {
-    const [products, Setproducts] = useState([{
-        _id: 1,
-        seller_id: 10,
-        name: "제목입니다.",
-        price: 10000,
-        description: "내용입니다. ",
-        // fileurl: "ㅁㅇㄴㄹ",
-        createdAt: "1234",
-        updatedAt: "1234",
-        buyer_id: 5,
-        id: 3
-    },]);
+export default function AuctionHome({ history }) {
+    const [products, Setproducts] = useState([]);
 
- 
     const fetchProducts = async () => {
-        let res = await axios.get("/store");
-        let product_list = res.data.payload.filter((p) => p.valid === true);
-        product_list = product_list.map((data) => {
-            return {
-                ...data,
-                id: data.pk,
-            };
-        });
-        Setproducts(product_list);
+        let res = await axios.get("/apis/v1/store");
+        let _product = res.data;
+        Setproducts(_product);
     };
 
     useEffect(() => {
@@ -73,7 +53,8 @@ export default function AuctionHome({history}) {
                     <h3 style={{ marginTop: 40 }}>오늘의 경매</h3>
 
                     <hr />
-                    <Loading products={products} />
+                    {/* <Loading products={products} /> */}
+                    <MakeAuctionCard products={products}></MakeAuctionCard>
                 </Container>
             </div>
         </div>
