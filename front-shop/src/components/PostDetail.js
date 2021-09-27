@@ -43,8 +43,18 @@ export default function PostDetail({ history, match }) {
     const fetchPost = async () => {
         await axios.get(`/apis/v1/post/${postId}/hit`);
         let res = await axios.get(`/apis/v1/post/${postId}`);
-        let user_res = await axios.get(`/apis/v1/user/${res.data.payload.user_id}`);
-        setUser(user_res.data.payload);
+        await axios
+            .get(`/apis/v1/user/${res.data.payload.user_id}`)
+            .then((res) => {
+                setUser(res.data.payload);
+            })
+            .catch(() => {
+                setUser({
+                    ...user,
+                    username: "탈퇴한 사용자"
+                })
+            });
+
         setPost(res.data.payload);
     };
 

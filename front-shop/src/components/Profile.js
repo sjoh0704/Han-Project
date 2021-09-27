@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Title from "./Title";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import axios from "axios";
 import { loginAction, logoutAction } from "../modules/user";
 import { CategoryDirection } from "./CategoryBanner";
 import Rating from "./Rating";
+import { setDate } from "./Convenient";
 
 function Profile({ history }) {
     const dispatch = useDispatch();
@@ -14,14 +15,25 @@ function Profile({ history }) {
         userData: state.user.payload,
     }));
 
-    console.log(userData);
-
     const [user, setUser] = useState({
         username: userData.username,
-        email: userData.useremail,
+        useremail: userData.useremail,
         phone_number: userData.phone_number,
+        temperature: 36.5,
+        celcius: true,
+        created_at: "",
     });
-    const { username, email, phone_number } = user;
+
+    const getUserInfo = async () => {
+        let res = await axios.get(`/apis/v1/user/${userData.user_id}`);
+        setUser(res.data.payload);
+    };
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
+
+    const { username, useremail, phone_number } = user;
     const user_id = userData.user_id;
 
     const onChangeHandler = (e) => {
@@ -36,7 +48,7 @@ function Profile({ history }) {
         let body = {
             user_id: user_id,
             username: username,
-            useremail: email,
+            useremail: useremail,
             phone_number: phone_number,
         };
         await axios
@@ -73,10 +85,15 @@ function Profile({ history }) {
                     <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }}>
                         <div style={{ fontSize: "1.2rem", border: "1px solid #dedede", paddingTop: 30, paddingBottom: 60, paddingLeft: 10, paddingRight: 10 }}>
                             <Row>
-                                <Col lg={{span:10, offset:1}} xs={{span:12}}>
-                                    <div style={{marginBottom:30, padding:10}}>
+                                <Col lg={{ span: 10, offset: 1 }} xs={{ span: 12 }}>
+                                    <div style={{ marginBottom: 30, padding: 10 }}>
                                         <Rating user={user} />
                                     </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col lg={{ span: 10, offset: 1 }} xs={{ span: 12 }}>
+                                    <div style={{ marginBottom: 30 }}>가입 날짜: {setDate(user.created_at)}</div>
                                 </Col>
                             </Row>
 
@@ -97,7 +114,7 @@ function Profile({ history }) {
                                                 이메일
                                             </Form.Label>
                                             <Col sm="10" md="10" lg="8">
-                                                <Form.Control size="lg" name="email" value={email} onChange={onChangeHandler} placeholder="email을 입력해주세요" />
+                                                <Form.Control size="lg" name="useremail" value={useremail} onChange={onChangeHandler} placeholder="이메일을 입력해주세요" />
                                             </Col>
                                         </Form.Group>
                                         <br />
