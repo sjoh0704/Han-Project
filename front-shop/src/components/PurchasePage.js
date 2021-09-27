@@ -45,7 +45,7 @@ function PurchasePage({ location, history }) {
         };
         console.log(body);
         await axios
-            .post("/apis/v1/order/", body)
+            .post("/apis/v1/order", body)
             .then((res) => {
                 history.replace("/orderlist");
             })
@@ -163,7 +163,7 @@ function PurchasePage({ location, history }) {
                                 <h1>총 가격: {product.price * demand_amount}원</h1>
                                 <div className="d-grid gap-2">
                                     <br />
-                                    <button style={{ fontSize: "1.4rem", height:"3.5rem" }} className="emptyButton" onClick={onClickOrder}>
+                                    <button style={{ fontSize: "1.4rem", height: "3.5rem" }} className="emptyButton" onClick={onClickOrder}>
                                         구매하기
                                     </button>
                                 </div>

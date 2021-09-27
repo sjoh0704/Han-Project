@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { loginAction, logoutAction } from "../modules/user";
 import { CategoryDirection } from "./CategoryBanner";
+import Rating from "./Rating";
 
 function Profile({ history }) {
     const dispatch = useDispatch();
@@ -70,12 +71,20 @@ function Profile({ history }) {
                 <CategoryDirection tag1={"내정보 관리"}></CategoryDirection>
                 <Row>
                     <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }}>
-                        <div style={{ fontSize: "1.2rem", border: "1px solid #dedede", paddingTop: 60, paddingBottom: 60, paddingLeft:10, paddingRight:10}}>
+                        <div style={{ fontSize: "1.2rem", border: "1px solid #dedede", paddingTop: 30, paddingBottom: 60, paddingLeft: 10, paddingRight: 10 }}>
+                            <Row>
+                                <Col lg={{span:10, offset:1}} xs={{span:12}}>
+                                    <div style={{marginBottom:30, padding:10}}>
+                                        <Rating user={user} />
+                                    </div>
+                                </Col>
+                            </Row>
+
                             <Row>
                                 <Col lg={{ span: 10, offset: 2 }} md={{ span: 10, offset: 1 }} sm={{ span: 10, offset: 1 }}>
                                     <Form>
                                         <Form.Group as={Row} controlId="exampleForm.ControlInput1">
-                                            <Form.Label column sm="2"  md="2" lg="2" style={{}}>
+                                            <Form.Label column sm="2" md="2" lg="2" style={{}}>
                                                 아이디
                                             </Form.Label>
                                             <Col sm="10" md="10" lg="8">
@@ -84,7 +93,7 @@ function Profile({ history }) {
                                         </Form.Group>
                                         <br />
                                         <Form.Group as={Row} controlId="exampleForm.ControlInput1">
-                                            <Form.Label column sm="2"  md="2" lg="2" style={{}}>
+                                            <Form.Label column sm="2" md="2" lg="2" style={{}}>
                                                 이메일
                                             </Form.Label>
                                             <Col sm="10" md="10" lg="8">
@@ -93,17 +102,17 @@ function Profile({ history }) {
                                         </Form.Group>
                                         <br />
                                         <Form.Group as={Row} controlId="exampleForm.ControlInput1">
-                                            <Form.Label column  md="2" sm="2" lg="2" style={{}}>
+                                            <Form.Label column md="2" sm="2" lg="2" style={{}}>
                                                 전화번호
                                             </Form.Label>
-                                            <Col sm="10"  md="10" lg="8">
+                                            <Col sm="10" md="10" lg="8">
                                                 <Form.Control size="lg" name="phone_number" value={phone_number} onChange={onChangeHandler} placeholder="대시(-) 없이 입력해주세요" />
                                             </Col>
                                         </Form.Group>
                                         <br />
 
                                         <Row>
-                                            <Col lg={{ span: 4, offset: 2 }} md={{ span: 4, offset: 4 }}  sm={{ span: 4, offset: 4 }}>
+                                            <Col lg={{ span: 4, offset: 2 }} md={{ span: 4, offset: 4 }} sm={{ span: 4, offset: 4 }}>
                                                 <div className="d-grid gap-2">
                                                     <button className="filledButton" style={{ fontSize: "1.3rem", height: "3.5rem" }} onClick={onClickEditHandler}>
                                                         수정
@@ -111,7 +120,7 @@ function Profile({ history }) {
                                                     <span> </span>
                                                 </div>
                                             </Col>
-                                            <Col lg={{ span: 4, offset: 0 }} md={{ span: 4}} sm={{ span: 4, offset: 0 }}>
+                                            <Col lg={{ span: 4, offset: 0 }} md={{ span: 4 }} sm={{ span: 4, offset: 0 }}>
                                                 <div className="d-grid gap-2">
                                                     <button className="emptyButton" style={{ fontSize: "1.3rem", height: "3.5rem" }} onClick={onClickDeleteHandler}>
                                                         회원 탈퇴
