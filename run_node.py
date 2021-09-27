@@ -25,9 +25,9 @@ os.environ["MONGO_RATING_HOST"] = mongodb_container_ip
 
 # excute servers
 print("Excute Servers")
-os.system("nodemon ./cart/app.js &")
-os.system("nodemon ./rating/app.js &")
-os.system("nodemon ./post/app.js &")
+os.system("node ./cart/app.js &")
+os.system("node ./rating/app.js &")
+os.system("node ./post/app.js &")
 
 
 

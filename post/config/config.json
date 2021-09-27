@@ -3,7 +3,7 @@
     "username": "root",
     "password": "root",
     "database": "database_development",
-    "host": "172.17.0.3",
+    "host": "172.17.0.5",
     "dialect": "mysql"
   },
   "test": {
