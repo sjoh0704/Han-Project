@@ -16,18 +16,19 @@ def kill_process(port):
 kill_process(8080)
 kill_process(8081)
 kill_process(8082)
+kill_process(8083)
 
 # environment setting 
 print("Environment settings")
 mongodb_container_ip = os.popen("docker inspect {}| jq '.[0].NetworkSettings.IPAddress'".format(MONGODB_CONTAINER)).read().split('"')[1]
 os.environ["MONGO_CART_HOST"] = mongodb_container_ip
 os.environ["MONGO_RATING_HOST"] = mongodb_container_ip
+os.environ["MONGO_AUCTION_HOST"] = "mongodb://{}/auctiondb".format(mongodb_container_ip)
 
 # excute servers
 print("Excute Servers")
 os.system("node ./cart/app.js &")
 os.system("node ./rating/app.js &")
 os.system("node ./post/app.js &")
-
-
+os.system("node ./auction/app.js &")
 

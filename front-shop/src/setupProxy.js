@@ -10,7 +10,7 @@ module.exports = (app) => {
     app.use(
         "/socket.io",
         createProxyMiddleware({
-            target: process.env["REACT_APP_BASE_URL"] || "http://localhost:82",
+            target: "AUCTION_SERVICE" || "http://172.17.0.2",
             changeOrigin: true,
             ws: true,
         })
