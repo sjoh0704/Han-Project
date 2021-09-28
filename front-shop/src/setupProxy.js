@@ -7,12 +7,12 @@ module.exports = (app) => {
             changeOrigin: true,
         })
     );
-    app.use(
-        "/socket.io",
-        createProxyMiddleware({
-            target: "AUCTION_SERVICE" || "http://172.17.0.2",
-            changeOrigin: true,
-            ws: true,
-        })
-    );
+    // app.use(
+    //     "/ws",
+    //     createProxyMiddleware({
+    //         target: process.env["REACT_APP_SOCKET_URL"] || "http://auction-service.default.svc:8080",
+    //         changeOrigin: true,
+    //         ws: true,
+    //     })
+    // );
 };

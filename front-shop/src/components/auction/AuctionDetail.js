@@ -8,7 +8,7 @@ import Rating from "../Rating";
 import Modal from "../Modal";
 import io from "socket.io-client";
 import auctionTimer from "./timer";
-const socket = io(process.env["REACT_APP_BASE_URL"] || "http://localhost:82", { transports: ["websocket"] });
+const socket = io(process.env["REACT_APP_SOCKET_URL"] || "http://auction-service.default.svc:8080", { transports: ["websocket"] });
 
 function AuctionDetail({ match, history }) {
     const auctionId = match.params.number;
