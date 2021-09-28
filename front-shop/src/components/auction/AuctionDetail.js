@@ -15,6 +15,7 @@ function AuctionDetail({ match, history }) {
     const [timer, setTimer] = useState(new Date());
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContents, setModalContents] = useState("");
+    const [buyer, setBuyer] = useState({ username: "" });
     const closeModal = () => {
         setModalOpen(false);
     };
@@ -37,31 +38,44 @@ function AuctionDetail({ match, history }) {
         createdAt: null,
         updatedAt: null,
     });
+    if (auctionTimer(product.createdAt) === "마감") {
+        product.finish = true;
+    }
     const [seller, setSeller] = useState({});
 
     const fetchProduct = async () => {
         let res = await axios.get("/apis/v1/store/" + auctionId);
         let _product = res.data;
+        // _product.createdAt = "2021-09-28T16:52:25.492Z";
         setProduct(_product);
         setImage(_product.fileurl.length != 0 ? _product.fileurl[0].fileurls : null);
 
         let res_seller = await axios.get("/apis/v1/user/" + _product.seller_id);
         setSeller(res_seller.data.payload);
+        if (_product.buyer_id) {
+            let res_buyer = await axios.get("/apis/v1/user/" + _product.buyer_id);
+            setBuyer(res_buyer.data.payload);
+        }
 
         // check likes
     };
 
-    socket.on("products", (msg) => {
-        setProduct(msg);
-    });
+    // socket.on("products", (msg) => {
+    //     setProduct(msg);
+    // });
 
     useEffect(() => {
         fetchProduct();
-    }, [auctionId]);
+    }, [auctionId, buyer.username, product.price]);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setTimer(auctionTimer(product.createdAt));
+            if (timer === "마감") {
+                product.finish = true;
+                setProduct(product);
+                // history.replace(`/auction/detail/${auctionId}`);
+            }
         }, 1000);
         return () => clearInterval(interval);
     }, [timer]);
@@ -79,6 +93,7 @@ function AuctionDetail({ match, history }) {
             return;
         }
         let res = await axios.put("/apis/v1/store/plus/" + auctionId, { buyer_id: userData.user_id });
+        setProduct(product.price * 1.1);
         alert("입찰되었습니다.");
     };
 
@@ -169,12 +184,16 @@ function AuctionDetail({ match, history }) {
                                             </div>
                                             <p style={{ fontSize: "1.5rem", margin: 20 }}>등록 시간: {setDate(product.createdAt)}</p>
                                             <div style={{ fontSize: "1.5rem", margin: 20 }}>
-                                                <span style={{ fontSize: "1.5rem" }}> 낙찰까지 남은 시간:</span>
+                                                <span style={{ fontSize: "1.6rem" }}> 낙찰까지 남은 시간:</span>
                                                 {product.finish ? (
                                                     <span style={{ fontSize: "2rem", fontWeight: "bold" }}> {"0시간 0분 0초"}</span>
                                                 ) : (
                                                     <span style={{ fontSize: "2rem", fontWeight: "bold" }}> {auctionTimer(product.createdAt)}</span>
                                                 )}
+                                            </div>
+                                            <div style={{ fontSize: "1.5rem", margin: 20 }}>
+                                                <span style={{ fontSize: "1.5rem" }}>현재까지 최종 입찰자: </span>
+                                                {buyer.username ? <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>{buyer.username}</span> : "없습니다."}
                                             </div>
                                             <Row style={{ fontSize: "1.5rem", padding: 20 }}></Row>
                                             <Col>
@@ -185,7 +204,7 @@ function AuctionDetail({ match, history }) {
                                                 <div className="d-grid gap-2">
                                                     {product.finish ? (
                                                         <div>
-                                                            <p style={{ fontSize: "2rem", margin: 30, color: "red" }}>경매가 마감되었습니다</p>
+                                                            <p style={{ fontSize: "2.5rem", margin: 15, color: "red" }}>경매가 마감되었습니다</p>
                                                         </div>
                                                     ) : (
                                                         <button className="emptyButton" onClick={onClickBid} style={{ fontSize: "1.5rem", margin: 20, height: 50 }}>
