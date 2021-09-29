@@ -8,9 +8,6 @@ COPY . .
 
 RUN npm install --production
 
-
-CMD ["sleep", "20"]
-
-CMD ["node", "app.js"]
+ENTRYPOINT ["/bin/bash", "run.sh"]
 
 EXPOSE 8080

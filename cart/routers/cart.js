@@ -13,7 +13,7 @@ const existValid = async (name, tmp, res) =>{
 
 // get all carts 
 router.get('/carts', async(req, res)=> {
-
+    console.log('체크!')
     const carts = await Cart.find({}).exec();
 
     res.send({payload: carts,
@@ -60,7 +60,7 @@ router.get('/carts/users/:buyerId', async(req, res)=> {
 
 // cart check 
 router.post('/carts/check', async(req, res)=> {
-    console.log('체크!')
+
     const {product_id, buyer_id, seller_id} = req.body;
     const cartCheck = await Cart.find({$and: [{productId: product_id},{buyerId: buyer_id}, {sellerId: seller_id}]}).exec(); 
     if(cartCheck.length === 0){

@@ -1,6 +1,6 @@
 #!/bin/bash
-frontend=frontend-service.default.svc
-# frontend=localhost:3000
+# frontend=frontend-service.default.svc
+frontend=localhost:3000
 generate(){
     url=http://$1$2
     echo ---------------------------------------------------------

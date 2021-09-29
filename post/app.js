@@ -22,21 +22,6 @@ app.get('/health', (req, res) => {
 
 app.use('/apis/v1', postRouter);
 app.use('/apis/v1', commentRouter);
-
-// Post.create({
-//     user_id: 10000,
-//     title: 'test입니다.',
-//     description: 'dafafdaf',
-//     hit: 10,
-//     area: '충청도',
-// });
-
-// Comment.create({
-//     PostId: 1,
-//     user_id: 10000,
-//     content: 'casdfasfd',
-// });
-
 app.listen(port, () => {
     console.log(`Listenting: ${port}`);
 });

@@ -43,5 +43,7 @@ module.exports = class Post extends Sequelize.Model {
 
     static associate(db) {
         db.Post.hasMany(db.Comment, { foreignKey: 'postId', sourceKey: 'id' });
+        db.Post.hasMany(db.Image, { foreignKey: 'postId', sourceKey: 'id' });
+        
     }
 };

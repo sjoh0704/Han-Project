@@ -1,5 +1,5 @@
 import react from 'react'
-import DisplayProducts from './MakeCard'
+import MakeCard from './MakeCard'
 import {Container, Spinner, Row, Col} from 'react-bootstrap'
 const Loading = ({products}) =>{
     if(products.length==0)
@@ -17,7 +17,7 @@ const Loading = ({products}) =>{
     return(
         <div>
         <div style={{marginTop:30}}/>           
-        <DisplayProducts products={products}/>
+        <MakeCard products={products}/>
         </div>
     )
 
