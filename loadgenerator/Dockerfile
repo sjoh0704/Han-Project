@@ -1,4 +1,6 @@
-FROM ubuntu:18.04
+FROM python:3.7.8-buster
+
+ENV FRONTEND frontend-service.default.svc
 
 WORKDIR /app
 
@@ -10,6 +12,6 @@ RUN apt install curl -y
 
 RUN apt install jq -y
 
-CMD sh load.sh
+CMD ./load.py
 
 EXPOSE 80
